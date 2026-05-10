@@ -1,0 +1,1937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ElectroMart – Your Tech Universe</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<style>
+  :root {
+    --primary: #FF6B2B;
+    --primary-light: #FF8F5E;
+    --primary-dark: #E0541A;
+    --secondary: #1A1A2E;
+    --accent: #00D4AA;
+    --accent2: #FFD93D;
+    --surface: #F8F5F0;
+    --surface2: #FFF9F4;
+    --white: #FFFFFF;
+    --text: #1A1A2E;
+    --text-muted: #6B6B8A;
+    --border: #E8E0D8;
+    --shadow: 0 4px 24px rgba(255,107,43,0.12);
+    --shadow-lg: 0 12px 48px rgba(255,107,43,0.18);
+    --radius: 16px;
+    --radius-lg: 24px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--surface);
+    color: var(--text);
+    overflow-x: hidden;
+    font-size: 15px;
+    line-height: 1.65;
+  }
+
+  h1, h2, h3, h4, h5, .brand {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+
+  /* ========== LOADER ========== */
+  #loader {
+    position: fixed; inset: 0;
+    background: var(--secondary);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 1.5rem;
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+  }
+  #loader.hide { opacity: 0; visibility: hidden; }
+  .loader-logo {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--white);
+  }
+  .loader-logo span { color: var(--primary); }
+  .loader-bar {
+    width: 220px; height: 4px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .loader-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    border-radius: 4px;
+    animation: loaderFill 1.8s ease forwards;
+  }
+  @keyframes loaderFill { from { width: 0 } to { width: 100% } }
+
+  /* ========== NAVBAR ========== */
+  .navbar {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 0.75rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+    transition: all 0.3s ease;
+  }
+  .navbar.scrolled {
+    padding: 0.5rem 0;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.12);
+  }
+  .navbar-brand {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--secondary) !important;
+    letter-spacing: -0.5px;
+  }
+  .navbar-brand span { color: var(--primary); }
+  .navbar-brand small {
+    font-size: 0.55rem;
+    font-weight: 400;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    display: block;
+    font-family: 'Inter', sans-serif;
+    margin-top: -4px;
+  }
+  .nav-link {
+    font-weight: 500;
+    color: var(--text) !important;
+    padding: 0.4rem 1rem !important;
+    border-radius: 8px;
+    transition: all 0.2s;
+    font-size: 0.9rem;
+    position: relative;
+  }
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px; left: 1rem; right: 1rem;
+    height: 2px;
+    background: var(--primary);
+    border-radius: 2px;
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+  }
+  .nav-link:hover::after, .nav-link.active::after { transform: scaleX(1); }
+  .nav-link:hover { color: var(--primary) !important; }
+
+  .navbar-icons { display: flex; align-items: center; gap: 0.5rem; }
+  .nav-icon-btn {
+    width: 40px; height: 40px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface);
+    color: var(--text);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    text-decoration: none;
+  }
+  .nav-icon-btn:hover { background: var(--primary); border-color: var(--primary); color: white; transform: translateY(-2px); }
+  .badge-dot {
+    position: absolute; top: -4px; right: -4px;
+    width: 18px; height: 18px;
+    background: var(--primary);
+    color: white;
+    border-radius: 50%;
+    font-size: 0.65rem;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    border: 2px solid white;
+  }
+  .btn-nav-cta {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 0.5rem 1.2rem;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: inline-flex; align-items: center; gap: 0.4rem;
+  }
+  .btn-nav-cta:hover { background: var(--primary-dark); color: white; transform: translateY(-2px); box-shadow: var(--shadow); }
+
+  /* ========== HERO ========== */
+  .hero {
+    background: var(--secondary);
+    min-height: 92vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    padding: 4rem 0;
+  }
+  .hero-bg-circle {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.08;
+    background: var(--primary);
+    animation: float 6s ease-in-out infinite;
+  }
+  .hero-bg-circle:nth-child(1) { width: 600px; height: 600px; top: -200px; right: -150px; animation-delay: 0s; }
+  .hero-bg-circle:nth-child(2) { width: 400px; height: 400px; bottom: -100px; left: -80px; animation-delay: 2s; background: var(--accent); }
+  .hero-bg-circle:nth-child(3) { width: 200px; height: 200px; top: 40%; left: 35%; animation-delay: 4s; background: var(--accent2); opacity: 0.05; }
+  @keyframes float { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-20px) } }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: rgba(255,107,43,0.15);
+    border: 1px solid rgba(255,107,43,0.3);
+    border-radius: 50px;
+    padding: 0.4rem 1rem;
+    color: var(--primary-light);
+    font-size: 0.825rem;
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+    animation: fadeInUp 0.6s ease both;
+  }
+  .hero-badge .dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.4);opacity:0.7} }
+
+  .hero h1 {
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.2;
+    letter-spacing: -0.3px;
+    animation: fadeInUp 0.6s ease 0.15s both;
+  }
+  .hero h1 .highlight {
+    color: var(--primary);
+    position: relative;
+    display: inline-block;
+  }
+  .hero h1 .highlight::after {
+    content: '';
+    position: absolute;
+    bottom: -4px; left: 0; right: 0;
+    height: 4px;
+    background: var(--accent);
+    border-radius: 2px;
+  }
+  .hero p {
+    font-size: 1.1rem;
+    color: rgba(255,255,255,0.65);
+    max-width: 500px;
+    line-height: 1.7;
+    margin: 1.5rem 0;
+    animation: fadeInUp 0.6s ease 0.3s both;
+  }
+  .hero-buttons {
+    display: flex; gap: 1rem; flex-wrap: wrap;
+    animation: fadeInUp 0.6s ease 0.45s both;
+  }
+  .btn-primary-hero {
+    background: var(--primary);
+    color: white;
+    padding: 0.85rem 2rem;
+    border-radius: var(--radius);
+    font-weight: 600;
+    font-size: 1rem;
+    text-decoration: none;
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    transition: all 0.3s;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(255,107,43,0.35);
+  }
+  .btn-primary-hero:hover { transform: translateY(-3px); box-shadow: 0 8px 32px rgba(255,107,43,0.45); color: white; background: var(--primary-dark); }
+  .btn-outline-hero {
+    background: transparent;
+    color: white;
+    padding: 0.85rem 2rem;
+    border-radius: var(--radius);
+    font-weight: 600;
+    font-size: 1rem;
+    text-decoration: none;
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    transition: all 0.3s;
+    border: 1.5px solid rgba(255,255,255,0.3);
+    cursor: pointer;
+  }
+  .btn-outline-hero:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.5); color: white; transform: translateY(-3px); }
+
+  .hero-stats {
+    display: flex; gap: 2rem; margin-top: 3rem;
+    animation: fadeInUp 0.6s ease 0.6s both;
+  }
+  .stat-item { text-align: left; }
+  .stat-num {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.8rem; font-weight: 700;
+    color: var(--white);
+  }
+  .stat-num span { color: var(--primary); }
+  .stat-label { font-size: 0.78rem; color: rgba(255,255,255,0.5); letter-spacing: 0.5px; }
+
+  .hero-image-wrap {
+    position: relative;
+    animation: fadeInRight 0.8s ease 0.3s both;
+  }
+  @keyframes fadeInRight { from { opacity:0; transform: translateX(60px) } to { opacity:1; transform: translateX(0) } }
+
+  .hero-product-card {
+    background: rgba(255,255,255,0.07);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-product-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,107,43,0.1), transparent);
+    border-radius: var(--radius-lg);
+  }
+  .hero-main-product {
+    width: 100%;
+    max-width: 380px;
+    height: 320px;
+    object-fit: contain;
+    filter: drop-shadow(0 20px 40px rgba(255,107,43,0.3));
+    animation: levitate 4s ease-in-out infinite;
+  }
+  @keyframes levitate { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-15px) } }
+
+  .floating-tag {
+    position: absolute;
+    background: white;
+    border-radius: var(--radius);
+    padding: 0.6rem 1rem;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text);
+    display: flex; align-items: center; gap: 0.5rem;
+    animation: floatTag 3s ease-in-out infinite;
+  }
+  .floating-tag i { color: var(--primary); }
+  .floating-tag.tag1 { top: 15%; left: -30px; animation-delay: 0.5s; }
+  .floating-tag.tag2 { bottom: 20%; right: -20px; animation-delay: 1.5s; }
+  .floating-tag.tag3 { top: 60%; left: -40px; animation-delay: 1s; }
+  @keyframes floatTag { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+
+  /* ========== SECTION HEADERS ========== */
+  .section-label {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    font-size: 0.75rem; font-weight: 600;
+    letter-spacing: 1.2px; text-transform: uppercase;
+    color: var(--primary);
+    margin-bottom: 0.75rem;
+    font-family: 'Inter', sans-serif;
+  }
+  .section-label::before, .section-label::after {
+    content: ''; display: block;
+    width: 24px; height: 2px;
+    background: var(--primary);
+    border-radius: 2px;
+  }
+  .section-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: clamp(1.5rem, 2.8vw, 2rem);
+    font-weight: 700;
+    color: var(--secondary);
+    line-height: 1.3;
+    letter-spacing: -0.1px;
+  }
+  .section-title .accent { color: var(--primary); }
+  .section-sub {
+    color: var(--text-muted);
+    font-size: 1rem;
+    margin-top: 0.5rem;
+    max-width: 500px;
+  }
+
+  /* ========== CATEGORIES ========== */
+  .categories-section { padding: 5rem 0; background: var(--white); }
+
+  .cat-card {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    padding: 2rem 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    border: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+    color: var(--text);
+    display: block;
+  }
+  .cat-card::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .cat-card:hover { transform: translateY(-8px) scale(1.02); border-color: var(--primary); box-shadow: var(--shadow-lg); }
+  .cat-card:hover::before { opacity: 1; }
+  .cat-card:hover .cat-icon, .cat-card:hover .cat-name, .cat-card:hover .cat-count { color: white; }
+  .cat-card:hover .cat-icon-wrap { background: rgba(255,255,255,0.15); }
+
+  .cat-icon-wrap {
+    width: 72px; height: 72px;
+    background: var(--white);
+    border-radius: 18px;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 1rem;
+    transition: all 0.3s;
+    position: relative; z-index: 1;
+  }
+  .cat-icon { font-size: 2rem; color: var(--primary); position: relative; z-index: 1; transition: color 0.3s; }
+  .cat-name { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 0.95rem; margin-bottom: 0.25rem; position: relative; z-index: 1; transition: color 0.3s; }
+  .cat-count { font-size: 0.78rem; color: var(--text-muted); position: relative; z-index: 1; transition: color 0.3s; }
+
+  /* ========== FEATURED PRODUCTS ========== */
+  .products-section { padding: 5rem 0; background: var(--surface); }
+
+  .product-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    border: 1px solid var(--border);
+    position: relative;
+    cursor: pointer;
+  }
+  .product-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-lg); border-color: var(--primary); }
+
+  .product-img-wrap {
+    background: var(--surface);
+    padding: 2rem;
+    display: flex; align-items: center; justify-content: center;
+    height: 220px;
+    position: relative;
+    overflow: hidden;
+  }
+  .product-img-wrap::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(255,107,43,0.05), transparent);
+  }
+  .product-img {
+    width: 140px; height: 140px;
+    object-fit: contain;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .product-card:hover .product-img { transform: scale(1.1) rotate(-2deg); }
+
+  .product-badges {
+    position: absolute; top: 1rem; left: 1rem;
+    display: flex; flex-direction: column; gap: 0.4rem;
+    z-index: 2;
+  }
+  .badge-pill {
+    padding: 0.25rem 0.6rem;
+    border-radius: 50px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .badge-new { background: var(--accent); color: var(--secondary); }
+  .badge-hot { background: var(--primary); color: white; }
+  .badge-sale { background: var(--accent2); color: var(--secondary); }
+
+  .wishlist-btn {
+    position: absolute; top: 1rem; right: 1rem;
+    width: 36px; height: 36px;
+    background: white;
+    border-radius: 50%;
+    border: 1.5px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    z-index: 2;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+  .wishlist-btn:hover, .wishlist-btn.active { background: var(--primary); border-color: var(--primary); color: white; }
+  .wishlist-btn.active { animation: heartPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+  @keyframes heartPop { 0% { transform:scale(1) } 50% { transform:scale(1.4) } 100% { transform:scale(1) } }
+
+  .product-info { padding: 1.25rem 1.5rem 1.5rem; }
+  .product-brand { font-size: 0.75rem; font-weight: 600; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.25rem; }
+  .product-name { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--text); margin-bottom: 0.5rem; line-height: 1.3; }
+  .product-rating { display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0.75rem; }
+  .stars { color: var(--accent2); font-size: 0.78rem; }
+  .rating-count { font-size: 0.75rem; color: var(--text-muted); }
+  .product-price { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; }
+  .price-current { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.3rem; font-weight: 700; color: var(--text); }
+  .price-old { font-size: 0.875rem; color: var(--text-muted); text-decoration: line-through; }
+  .price-off { font-size: 0.75rem; font-weight: 700; color: #00C48C; background: rgba(0,196,140,0.1); padding: 0.15rem 0.4rem; border-radius: 4px; }
+
+  .btn-add-cart {
+    width: 100%;
+    background: var(--secondary);
+    color: white;
+    border: none;
+    padding: 0.7rem;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.25s;
+    display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+  }
+  .btn-add-cart:hover { background: var(--primary); transform: translateY(-2px); box-shadow: var(--shadow); }
+  .btn-add-cart.added { background: var(--accent); color: var(--secondary); }
+
+  /* ========== DEALS BANNER ========== */
+  .deals-section {
+    padding: 5rem 0;
+    background: var(--secondary);
+    position: relative;
+    overflow: hidden;
+  }
+  .deals-section::before {
+    content: '';
+    position: absolute;
+    top: -200px; right: -200px;
+    width: 600px; height: 600px;
+    background: var(--primary);
+    border-radius: 50%;
+    opacity: 0.06;
+  }
+  .deals-section::after {
+    content: '';
+    position: absolute;
+    bottom: -150px; left: -100px;
+    width: 400px; height: 400px;
+    background: var(--accent);
+    border-radius: 50%;
+    opacity: 0.06;
+  }
+
+  .deal-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: var(--radius-lg);
+    padding: 2.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.35s;
+  }
+  .deal-card:hover { background: rgba(255,255,255,0.08); border-color: var(--primary); transform: translateY(-4px); }
+  .deal-label { font-size: 0.75rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin-bottom: 0.75rem; }
+  .deal-title { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.5rem; font-weight: 700; color: white; margin-bottom: 0.75rem; }
+  .deal-sub { font-size: 0.875rem; color: rgba(255,255,255,0.55); margin-bottom: 1.5rem; }
+  .deal-price { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 2.2rem; font-weight: 700; color: var(--primary); }
+  .deal-price small { font-size: 0.875rem; color: rgba(255,255,255,0.4); text-decoration: line-through; font-family: 'Inter', sans-serif; font-weight: 400; margin-left: 0.5rem; }
+
+  .countdown {
+    display: flex; gap: 0.75rem; margin: 1.5rem 0;
+  }
+  .countdown-unit {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px;
+    padding: 0.6rem 0.8rem;
+    text-align: center;
+    min-width: 60px;
+  }
+  .countdown-num {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.5rem; font-weight: 700;
+    color: var(--primary-light);
+    display: block;
+  }
+  .countdown-lbl { font-size: 0.65rem; color: rgba(255,255,255,0.4); letter-spacing: 1px; text-transform: uppercase; }
+
+  /* ========== BRANDS ========== */
+  .brands-section { padding: 4rem 0; background: var(--white); border-top: 1px solid var(--border); }
+  .brand-logo {
+    display: flex; align-items: center; justify-content: center;
+    height: 60px;
+    opacity: 0.35;
+    transition: all 0.3s;
+    filter: grayscale(100%);
+  }
+  .brand-logo:hover { opacity: 1; filter: none; }
+  .brand-logo-text {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--secondary);
+    letter-spacing: -0.5px;
+  }
+
+  /* ========== TESTIMONIALS ========== */
+  .testimonials-section { padding: 5rem 0; background: var(--surface); }
+
+  .testimonial-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    border: 1px solid var(--border);
+    transition: all 0.3s;
+    height: 100%;
+  }
+  .testimonial-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); border-color: var(--primary); }
+  .testimonial-quote { font-size: 2.5rem; color: var(--primary); opacity: 0.3; line-height: 1; margin-bottom: 0.5rem; font-family: Georgia, serif; }
+  .testimonial-text { font-size: 0.9rem; color: var(--text-muted); line-height: 1.7; margin-bottom: 1.5rem; }
+  .testimonial-author { display: flex; align-items: center; gap: 0.75rem; }
+  .author-avatar {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700; font-size: 0.9rem;
+    color: white;
+    flex-shrink: 0;
+  }
+  .author-name { font-weight: 600; font-size: 0.875rem; }
+  .author-meta { font-size: 0.75rem; color: var(--text-muted); }
+
+  /* ========== NEWSLETTER ========== */
+  .newsletter-section {
+    padding: 5rem 0;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  .newsletter-section::before {
+    content: '';
+    position: absolute; top: -150px; right: -150px;
+    width: 500px; height: 500px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 50%;
+  }
+  .newsletter-title { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 2.4rem; font-weight: 700; color: white; margin-bottom: 0.75rem; }
+  .newsletter-sub { color: rgba(255,255,255,0.75); font-size: 1rem; margin-bottom: 2rem; }
+  .newsletter-form { display: flex; gap: 0.75rem; max-width: 500px; }
+  .newsletter-input {
+    flex: 1;
+    background: rgba(255,255,255,0.15);
+    border: 1.5px solid rgba(255,255,255,0.3);
+    border-radius: var(--radius);
+    padding: 0.85rem 1.25rem;
+    color: white;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s;
+    font-family: 'Inter', sans-serif;
+  }
+  .newsletter-input::placeholder { color: rgba(255,255,255,0.5); }
+  .newsletter-input:focus { border-color: rgba(255,255,255,0.7); background: rgba(255,255,255,0.2); }
+  .btn-subscribe {
+    background: white;
+    color: var(--primary);
+    border: none;
+    padding: 0.85rem 1.5rem;
+    border-radius: var(--radius);
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+    font-family: 'Inter', sans-serif;
+  }
+  .btn-subscribe:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+
+  /* ========== FEATURES BAR ========== */
+  .features-bar {
+    background: var(--white);
+    padding: 2.5rem 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .feature-item {
+    display: flex; align-items: center; gap: 1rem;
+    padding: 0.5rem;
+  }
+  .feature-icon {
+    width: 52px; height: 52px;
+    background: rgba(255,107,43,0.1);
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem;
+    color: var(--primary);
+    flex-shrink: 0;
+  }
+  .feature-title { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 0.9rem; }
+  .feature-sub { font-size: 0.78rem; color: var(--text-muted); }
+
+  /* ========== FOOTER ========== */
+  footer {
+    background: var(--secondary);
+    color: rgba(255,255,255,0.65);
+    padding: 5rem 0 0;
+  }
+  .footer-brand {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.8rem; font-weight: 700;
+    color: white;
+    margin-bottom: 1rem;
+  }
+  .footer-brand span { color: var(--primary); }
+  .footer-desc { font-size: 0.875rem; line-height: 1.7; max-width: 280px; margin-bottom: 1.5rem; }
+  .social-links { display: flex; gap: 0.75rem; }
+  .social-btn {
+    width: 40px; height: 40px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    color: rgba(255,255,255,0.6);
+    transition: all 0.2s;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  .social-btn:hover { background: var(--primary); border-color: var(--primary); color: white; transform: translateY(-3px); }
+
+  .footer-heading {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700; font-size: 0.9rem;
+    color: white; text-transform: uppercase;
+    letter-spacing: 1px; margin-bottom: 1.5rem;
+  }
+  .footer-links { list-style: none; padding: 0; }
+  .footer-links li { margin-bottom: 0.65rem; }
+  .footer-links a {
+    color: rgba(255,255,255,0.5);
+    text-decoration: none;
+    font-size: 0.875rem;
+    transition: all 0.2s;
+    display: inline-flex; align-items: center; gap: 0.4rem;
+  }
+  .footer-links a:hover { color: var(--primary); padding-left: 4px; }
+
+  .footer-contact-item { display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; }
+  .footer-contact-icon { color: var(--primary); font-size: 0.9rem; margin-top: 2px; }
+  .footer-contact-text { font-size: 0.85rem; color: rgba(255,255,255,0.55); line-height: 1.5; }
+
+  .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding: 1.5rem 0;
+    margin-top: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .footer-bottom p { font-size: 0.8rem; margin: 0; }
+  .footer-payment { display: flex; gap: 0.5rem; align-items: center; }
+  .payment-icon {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 6px;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: white;
+    letter-spacing: 0.5px;
+  }
+  .payment-icon.visa { color: #1a1f71; background: white; }
+  .payment-icon.mc { color: #eb001b; background: white; }
+
+  /* ========== PAGE TRANSITIONS ========== */
+  .page-section {
+    display: none;
+    animation: pageEnter 0.45s ease;
+  }
+  .page-section.active { display: block; }
+  @keyframes pageEnter { from { opacity:0; transform:translateY(20px) } to { opacity:1; transform:translateY(0) } }
+  @keyframes fadeInUp { from { opacity:0; transform:translateY(30px) } to { opacity:1; transform:translateY(0) } }
+
+  /* ========== CART DRAWER ========== */
+  .cart-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 1100;
+    opacity: 0; visibility: hidden;
+    transition: all 0.3s;
+  }
+  .cart-overlay.open { opacity: 1; visibility: visible; }
+  .cart-drawer {
+    position: fixed; top: 0; right: 0; bottom: 0;
+    width: 400px; max-width: 100vw;
+    background: var(--white);
+    z-index: 1200;
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    display: flex; flex-direction: column;
+    box-shadow: -8px 0 48px rgba(0,0,0,0.15);
+  }
+  .cart-drawer.open { transform: translateX(0); }
+  .cart-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .cart-title { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.2rem; font-weight: 700; }
+  .cart-close {
+    width: 36px; height: 36px; border-radius: 8px;
+    background: var(--surface);
+    border: none; cursor: pointer; font-size: 1rem;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .cart-close:hover { background: var(--primary); color: white; }
+  .cart-body { flex: 1; overflow-y: auto; padding: 1.5rem; }
+  .cart-empty { text-align: center; padding: 3rem 1rem; color: var(--text-muted); }
+  .cart-empty i { font-size: 3rem; margin-bottom: 1rem; color: var(--border); }
+  .cart-item {
+    display: flex; align-items: center; gap: 1rem;
+    padding: 1rem 0; border-bottom: 1px solid var(--border);
+    animation: fadeInUp 0.3s ease;
+  }
+  .cart-item-img {
+    width: 70px; height: 70px;
+    background: var(--surface);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2rem;
+    flex-shrink: 0;
+  }
+  .cart-item-name { font-weight: 600; font-size: 0.875rem; margin-bottom: 0.25rem; }
+  .cart-item-price { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; color: var(--primary); }
+  .cart-item-remove { margin-left: auto; background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1rem; transition: color 0.2s; }
+  .cart-item-remove:hover { color: #e74c3c; }
+  .cart-footer {
+    padding: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+  .cart-total { display: flex; justify-content: space-between; margin-bottom: 1.25rem; }
+  .cart-total-label { font-weight: 600; }
+  .cart-total-amount { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.3rem; font-weight: 700; color: var(--primary); }
+  .btn-checkout {
+    width: 100%; background: var(--primary); color: white;
+    border: none; padding: 1rem; border-radius: var(--radius);
+    font-weight: 700; font-size: 1rem; cursor: pointer;
+    transition: all 0.2s; font-family: 'Inter', sans-serif;
+  }
+  .btn-checkout:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: var(--shadow); }
+
+  /* ========== SEARCH BAR ========== */
+  .search-modal {
+    position: fixed; inset: 0;
+    background: rgba(26,26,46,0.9);
+    z-index: 1300;
+    display: flex; align-items: flex-start; justify-content: center;
+    padding-top: 10vh;
+    opacity: 0; visibility: hidden;
+    transition: all 0.3s;
+  }
+  .search-modal.open { opacity: 1; visibility: visible; }
+  .search-box {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    width: 90%; max-width: 600px;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.3);
+    animation: scaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  @keyframes scaleIn { from { transform:scale(0.9); opacity:0 } to { transform:scale(1); opacity:1 } }
+  .search-input-wrap { display: flex; align-items: center; gap: 0.75rem; border-bottom: 2px solid var(--border); padding-bottom: 1rem; margin-bottom: 1rem; }
+  .search-icon { font-size: 1.2rem; color: var(--primary); }
+  .search-input {
+    flex: 1; border: none; outline: none;
+    font-size: 1.1rem; font-family: 'Inter', sans-serif;
+    color: var(--text);
+  }
+  .search-close { background: none; border: none; cursor: pointer; color: var(--text-muted); font-size: 1rem; }
+  .search-suggestions p { font-size: 0.78rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.75rem; }
+  .suggestion-chip {
+    display: inline-block;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    padding: 0.3rem 0.85rem;
+    font-size: 0.825rem;
+    margin: 0 0.4rem 0.5rem 0;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .suggestion-chip:hover { background: var(--primary); color: white; border-color: var(--primary); }
+
+  /* ========== TOAST NOTIFICATION ========== */
+  .toast-container { position: fixed; bottom: 2rem; right: 2rem; z-index: 9999; display: flex; flex-direction: column; gap: 0.75rem; }
+  .toast {
+    background: var(--secondary); color: white;
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius);
+    font-size: 0.875rem; font-weight: 500;
+    display: flex; align-items: center; gap: 0.75rem;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+    min-width: 280px;
+    animation: toastIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    border-left: 4px solid var(--primary);
+  }
+  .toast i { color: var(--primary); font-size: 1rem; }
+  @keyframes toastIn { from{opacity:0;transform:translateX(50px)} to{opacity:1;transform:translateX(0)} }
+
+  /* ========== SCROLL ANIMATIONS ========== */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+
+  /* ========== MISC ========== */
+  .section-divider {
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary), var(--accent), var(--accent2));
+    border-radius: 2px;
+    margin: 0;
+  }
+  .back-to-top {
+    position: fixed; bottom: 2rem; left: 2rem;
+    width: 44px; height: 44px;
+    background: var(--primary); color: white;
+    border: none; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    opacity: 0; transform: translateY(20px);
+    z-index: 999;
+    font-size: 1rem;
+    box-shadow: var(--shadow);
+  }
+  .back-to-top.visible { opacity: 1; transform: translateY(0); }
+  .back-to-top:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+
+  .promo-bar {
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    color: white;
+    text-align: center;
+    padding: 0.5rem;
+    font-size: 0.825rem;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+  }
+  .promo-bar a { color: white; font-weight: 700; margin-left: 0.5rem; }
+
+  @media (max-width: 768px) {
+    .hero { padding: 3rem 0; min-height: auto; }
+    .hero h1 { font-size: 2rem; }
+    .hero-stats { gap: 1.5rem; }
+    .newsletter-form { flex-direction: column; }
+    .cart-drawer { width: 100vw; }
+    .floating-tag { display: none; }
+    .footer-bottom { flex-direction: column; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-logo">Electro<span>Mart</span></div>
+  <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+  <div style="font-size:0.8rem;color:rgba(255,255,255,0.4);margin-top:0.5rem;">Loading your tech universe...</div>
+</div>
+
+<!-- PROMO BAR -->
+<div class="promo-bar">
+  🎉 Free shipping on orders above ₹999! Use code <strong>ELECTRO10</strong> for extra 10% off
+  <a href="#" onclick="navigateTo('products');return false;">Shop Now →</a>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg" id="mainNav">
+  <div class="container">
+    <a class="navbar-brand" href="#" onclick="navigateTo('home');return false;">
+      Electro<span>Mart</span>
+      <small>Your Tech Universe</small>
+    </a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav mx-auto gap-1">
+        <li class="nav-item"><a class="nav-link active" href="#" onclick="navigateTo('home');return false;" data-page="home">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" onclick="navigateTo('products');return false;" data-page="products">Products</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" onclick="navigateTo('deals');return false;" data-page="deals">Deals</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" onclick="navigateTo('brands');return false;" data-page="brands">Brands</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" onclick="navigateTo('about');return false;" data-page="about">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" onclick="navigateTo('contact');return false;" data-page="contact">Contact</a></li>
+      </ul>
+      <div class="navbar-icons">
+        <button class="nav-icon-btn" onclick="toggleSearch()" title="Search"><i class="fas fa-search"></i></button>
+        <a class="nav-icon-btn" href="#" title="Wishlist"><i class="fas fa-heart"></i></a>
+        <button class="nav-icon-btn" onclick="toggleCart()" title="Cart">
+          <i class="fas fa-shopping-bag"></i>
+          <span class="badge-dot" id="cartCount">0</span>
+        </button>
+        <a class="btn-nav-cta" href="#" onclick="navigateTo('deals');return false;"><i class="fas fa-bolt"></i> Deals</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ========================================
+     PAGE: HOME
+======================================== -->
+<div id="page-home" class="page-section active">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg-circle"></div>
+    <div class="hero-bg-circle"></div>
+    <div class="hero-bg-circle"></div>
+    <div class="container">
+      <div class="row align-items-center g-5">
+        <div class="col-lg-6">
+          <div class="hero-badge">
+            <span class="dot"></span>
+            New Collection 2025 — Summer Tech Drop
+          </div>
+          <h1>Discover The <span class="highlight">Future</span> Of Electronics</h1>
+          <p>Premium gadgets, unbeatable prices, and lightning-fast delivery. Your one-stop destination for all things tech.</p>
+          <div class="hero-buttons">
+            <a href="#" class="btn-primary-hero" onclick="navigateTo('products');return false;">
+              <i class="fas fa-shopping-bag"></i> Shop Now
+            </a>
+            <a href="#" class="btn-outline-hero" onclick="navigateTo('deals');return false;">
+              <i class="fas fa-fire"></i> Hot Deals
+            </a>
+          </div>
+          <div class="hero-stats">
+            <div class="stat-item">
+              <div class="stat-num">50K<span>+</span></div>
+              <div class="stat-label">Happy Customers</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-num">10K<span>+</span></div>
+              <div class="stat-label">Products</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-num">200<span>+</span></div>
+              <div class="stat-label">Brands</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="hero-image-wrap">
+            <div class="hero-product-card text-center">
+              <div class="floating-tag tag1"><i class="fas fa-star"></i> Editor's Pick</div>
+              <div class="floating-tag tag2"><i class="fas fa-shipping-fast"></i> Free Shipping</div>
+              <div class="floating-tag tag3"><i class="fas fa-shield-alt"></i> 2 Year Warranty</div>
+              <div style="font-size:10rem;line-height:1;animation:levitate 4s ease-in-out infinite;display:inline-block;filter:drop-shadow(0 20px 40px rgba(255,107,43,0.35));">💻</div>
+              <div style="margin-top:1.5rem;">
+                <div style="font-size:0.75rem;color:rgba(255,255,255,0.5);letter-spacing:2px;text-transform:uppercase;margin-bottom:0.25rem;">Featured</div>
+                <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1.3rem;font-weight:700;color:white;">MacBook Air M3</div>
+                <div style="color:var(--primary);font-family:'Plus Jakarta Sans',sans-serif;font-size:1.6rem;font-weight:700;margin-top:0.5rem;">₹1,14,900</div>
+                <div style="color:rgba(255,255,255,0.4);font-size:0.8rem;text-decoration:line-through;">₹1,29,900</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES BAR -->
+  <div class="features-bar">
+    <div class="container">
+      <div class="row g-3">
+        <div class="col-md-3 col-6">
+          <div class="feature-item reveal">
+            <div class="feature-icon"><i class="fas fa-shipping-fast"></i></div>
+            <div>
+              <div class="feature-title">Free Delivery</div>
+              <div class="feature-sub">On orders above ₹999</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 col-6">
+          <div class="feature-item reveal reveal-delay-1">
+            <div class="feature-icon"><i class="fas fa-undo"></i></div>
+            <div>
+              <div class="feature-title">Easy Returns</div>
+              <div class="feature-sub">30-day return policy</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 col-6">
+          <div class="feature-item reveal reveal-delay-2">
+            <div class="feature-icon"><i class="fas fa-lock"></i></div>
+            <div>
+              <div class="feature-title">Secure Payment</div>
+              <div class="feature-sub">100% secure transactions</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 col-6">
+          <div class="feature-item reveal reveal-delay-3">
+            <div class="feature-icon"><i class="fas fa-headset"></i></div>
+            <div>
+              <div class="feature-title">24/7 Support</div>
+              <div class="feature-sub">Expert assistance</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CATEGORIES -->
+  <section class="categories-section">
+    <div class="container">
+      <div class="text-center mb-5 reveal">
+        <div class="section-label">Browse By</div>
+        <h2 class="section-title">Shop By <span class="accent">Category</span></h2>
+        <p class="section-sub mx-auto">Find exactly what you're looking for across our wide range of electronics categories</p>
+      </div>
+      <div class="row g-3">
+        <div class="col-md-2 col-4 reveal"><a href="#" class="cat-card" onclick="navigateTo('products');return false;"><div class="cat-icon-wrap"><i class="fas fa-laptop cat-icon"></i></div><div class="cat-name">Laptops</div><div class="cat-count">2,400+ items</div></a></div>
+        <div class="col-md-2 col-4 reveal reveal-delay-1"><a href="#" class="cat-card" onclick="navigateTo('products');return false;"><div class="cat-icon-wrap"><i class="fas fa-mobile-alt cat-icon"></i></div><div class="cat-name">Phones</div><div class="cat-count">3,200+ items</div></a></div>
+        <div class="col-md-2 col-4 reveal reveal-delay-2"><a href="#" class="cat-card" onclick="navigateTo('products');return false;"><div class="cat-icon-wrap"><i class="fas fa-headphones cat-icon"></i></div><div class="cat-name">Audio</div><div class="cat-count">1,800+ items</div></a></div>
+        <div class="col-md-2 col-4 reveal reveal-delay-3"><a href="#" class="cat-card" onclick="navigateTo('products');return false;"><div class="cat-icon-wrap"><i class="fas fa-tv cat-icon"></i></div><div class="cat-name">TVs</div><div class="cat-count">950+ items</div></a></div>
+        <div class="col-md-2 col-4 reveal reveal-delay-4"><a href="#" class="cat-card" onclick="navigateTo('products');return false;"><div class="cat-icon-wrap"><i class="fas fa-camera cat-icon"></i></div><div class="cat-name">Cameras</div><div class="cat-count">1,100+ items</div></a></div>
+        <div class="col-md-2 col-4 reveal reveal-delay-4"><a href="#" class="cat-card" onclick="navigateTo('products');return false;"><div class="cat-icon-wrap"><i class="fas fa-gamepad cat-icon"></i></div><div class="cat-name">Gaming</div><div class="cat-count">2,700+ items</div></a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURED PRODUCTS -->
+  <section class="products-section">
+    <div class="container">
+      <div class="d-flex align-items-end justify-content-between mb-5 reveal">
+        <div>
+          <div class="section-label">Top Picks</div>
+          <h2 class="section-title">Featured <span class="accent">Products</span></h2>
+        </div>
+        <a href="#" onclick="navigateTo('products');return false;" class="btn-primary-hero" style="font-size:0.85rem;padding:0.6rem 1.25rem;">View All <i class="fas fa-arrow-right"></i></a>
+      </div>
+      <div class="row g-4" id="featuredProductsGrid"></div>
+    </div>
+  </section>
+
+  <!-- DEALS BANNER -->
+  <section class="deals-section">
+    <div class="container">
+      <div class="row g-4 align-items-center">
+        <div class="col-lg-5 reveal">
+          <div class="section-label" style="color:var(--accent);">Limited Time</div>
+          <h2 class="section-title" style="color:white;">Don't Miss<br>Today's <span style="color:var(--primary);">Hot Deals</span></h2>
+          <p style="color:rgba(255,255,255,0.55);margin:1rem 0 2rem;">Exclusive discounts on premium electronics. These offers won't last long!</p>
+          <a href="#" onclick="navigateTo('deals');return false;" class="btn-primary-hero">
+            <i class="fas fa-bolt"></i> Explore All Deals
+          </a>
+        </div>
+        <div class="col-lg-7">
+          <div class="row g-3">
+            <div class="col-md-6 reveal reveal-delay-1">
+              <div class="deal-card">
+                <div class="deal-label">⚡ Flash Sale</div>
+                <div class="deal-title">Sony WH-1000XM5</div>
+                <div class="deal-sub">Wireless Noise Cancelling Headphones</div>
+                <div class="deal-price">₹24,990 <small>₹34,990</small></div>
+                <div class="countdown" id="countdown1"></div>
+                <button class="btn-add-cart" onclick="addToCart('Sony WH-1000XM5','₹24,990','🎧')">
+                  <i class="fas fa-cart-plus"></i> Add to Cart
+                </button>
+              </div>
+            </div>
+            <div class="col-md-6 reveal reveal-delay-2">
+              <div class="deal-card">
+                <div class="deal-label">🔥 Hot Deal</div>
+                <div class="deal-title">iPad Air M2</div>
+                <div class="deal-sub">10.9" Liquid Retina Display, 256GB</div>
+                <div class="deal-price">₹59,900 <small>₹74,900</small></div>
+                <div class="countdown" id="countdown2"></div>
+                <button class="btn-add-cart" onclick="addToCart('iPad Air M2','₹59,900','📱')">
+                  <i class="fas fa-cart-plus"></i> Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BRANDS -->
+  <section class="brands-section">
+    <div class="container">
+      <div class="text-center mb-4 reveal">
+        <div class="section-label">Partners</div>
+        <h2 class="section-title">Top <span class="accent">Brands</span></h2>
+      </div>
+      <div class="row align-items-center g-4">
+        <div class="col"><div class="brand-logo"><div class="brand-logo-text">Apple</div></div></div>
+        <div class="col"><div class="brand-logo"><div class="brand-logo-text">Samsung</div></div></div>
+        <div class="col"><div class="brand-logo"><div class="brand-logo-text">Sony</div></div></div>
+        <div class="col"><div class="brand-logo"><div class="brand-logo-text">LG</div></div></div>
+        <div class="col"><div class="brand-logo"><div class="brand-logo-text">Dell</div></div></div>
+        <div class="col"><div class="brand-logo"><div class="brand-logo-text">Bose</div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="testimonials-section">
+    <div class="container">
+      <div class="text-center mb-5 reveal">
+        <div class="section-label">Reviews</div>
+        <h2 class="section-title">What Our <span class="accent">Customers Say</span></h2>
+      </div>
+      <div class="row g-4">
+        <div class="col-md-4 reveal">
+          <div class="testimonial-card">
+            <div class="testimonial-quote">"</div>
+            <p class="testimonial-text">ElectroMart has the best selection of gadgets I've found online. The delivery was super fast and the product was exactly as described. Highly recommend!</p>
+            <div class="testimonial-author">
+              <div class="author-avatar" style="background:linear-gradient(135deg,#FF6B2B,#E0541A);">RK</div>
+              <div><div class="author-name">Rahul Kumar</div><div class="author-meta">⭐⭐⭐⭐⭐ • Hyderabad</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 reveal reveal-delay-1">
+          <div class="testimonial-card">
+            <div class="testimonial-quote">"</div>
+            <p class="testimonial-text">Got my laptop within 24 hours of ordering. Excellent packaging, genuine product with warranty. Customer support was incredibly helpful too!</p>
+            <div class="testimonial-author">
+              <div class="author-avatar" style="background:linear-gradient(135deg,#00D4AA,#009977);">PS</div>
+              <div><div class="author-name">Priya Sharma</div><div class="author-meta">⭐⭐⭐⭐⭐ • Mumbai</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 reveal reveal-delay-2">
+          <div class="testimonial-card">
+            <div class="testimonial-quote">"</div>
+            <p class="testimonial-text">The deals section is unbelievable. I saved over ₹8,000 on my Sony headphones compared to other sites. Will definitely shop here again!</p>
+            <div class="testimonial-author">
+              <div class="author-avatar" style="background:linear-gradient(135deg,#FFD93D,#e6c200);">AJ</div>
+              <div><div class="author-name">Arjun Joshi</div><div class="author-meta">⭐⭐⭐⭐⭐ • Bangalore</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NEWSLETTER -->
+  <section class="newsletter-section">
+    <div class="container">
+      <div class="row align-items-center g-4">
+        <div class="col-lg-6 reveal">
+          <h2 class="newsletter-title">Get Exclusive Deals<br>In Your Inbox</h2>
+          <p class="newsletter-sub">Subscribe to our newsletter and be the first to know about flash sales, new arrivals, and tech news.</p>
+          <div class="newsletter-form">
+            <input type="email" class="newsletter-input" placeholder="Enter your email address" id="newsletterEmail">
+            <button class="btn-subscribe" onclick="subscribeNewsletter()"><i class="fas fa-paper-plane"></i> Subscribe</button>
+          </div>
+          <div style="color:rgba(255,255,255,0.4);font-size:0.78rem;margin-top:0.75rem;"><i class="fas fa-shield-alt" style="margin-right:0.35rem;"></i>No spam, unsubscribe at any time</div>
+        </div>
+        <div class="col-lg-6 reveal reveal-delay-2">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+            <div style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:16px;padding:1.5rem;text-align:center;">
+              <div style="font-size:2rem;margin-bottom:0.5rem;">🎁</div>
+              <div style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;color:white;font-size:0.9rem;">Welcome Bonus</div>
+              <div style="font-size:0.78rem;color:rgba(255,255,255,0.5);">₹500 off first order</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:16px;padding:1.5rem;text-align:center;">
+              <div style="font-size:2rem;margin-bottom:0.5rem;">⚡</div>
+              <div style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;color:white;font-size:0.9rem;">Flash Alerts</div>
+              <div style="font-size:0.78rem;color:rgba(255,255,255,0.5);">Early deal access</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:16px;padding:1.5rem;text-align:center;">
+              <div style="font-size:2rem;margin-bottom:0.5rem;">🏆</div>
+              <div style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;color:white;font-size:0.9rem;">VIP Access</div>
+              <div style="font-size:0.78rem;color:rgba(255,255,255,0.5);">Members-only prices</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:16px;padding:1.5rem;text-align:center;">
+              <div style="font-size:2rem;margin-bottom:0.5rem;">📱</div>
+              <div style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;color:white;font-size:0.9rem;">Tech News</div>
+              <div style="font-size:0.78rem;color:rgba(255,255,255,0.5);">Weekly updates</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ========================================
+     PAGE: PRODUCTS
+======================================== -->
+<div id="page-products" class="page-section">
+  <div style="background:white;padding:3rem 0 2rem;border-bottom:1px solid var(--border);">
+    <div class="container">
+      <div class="section-label">Our Store</div>
+      <h1 class="section-title">All <span class="accent">Products</span></h1>
+    </div>
+  </div>
+  <div class="container" style="padding:3rem 12px;">
+    <div class="row g-4">
+      <div class="col-lg-3">
+        <div style="background:white;border-radius:var(--radius-lg);padding:1.5rem;border:1px solid var(--border);position:sticky;top:90px;">
+          <h5 style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;margin-bottom:1.5rem;">Filters</h5>
+          <div style="margin-bottom:1.5rem;">
+            <div style="font-weight:600;font-size:0.85rem;margin-bottom:0.75rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;">Category</div>
+            <div id="filterCategories" style="display:flex;flex-direction:column;gap:0.4rem;"></div>
+          </div>
+          <div style="margin-bottom:1.5rem;">
+            <div style="font-weight:600;font-size:0.85rem;margin-bottom:0.75rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;">Price Range</div>
+            <input type="range" class="form-range" min="0" max="200000" step="1000" value="200000" id="priceRange" oninput="document.getElementById('priceVal').textContent='Up to ₹'+parseInt(this.value).toLocaleString()">
+            <div style="font-size:0.85rem;color:var(--primary);font-weight:600;margin-top:0.5rem;" id="priceVal">Up to ₹2,00,000</div>
+          </div>
+          <div>
+            <div style="font-weight:600;font-size:0.85rem;margin-bottom:0.75rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;">Brand</div>
+            <div id="filterBrands" style="display:flex;flex-direction:column;gap:0.4rem;"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-9">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <div style="font-size:0.875rem;color:var(--text-muted);">Showing <strong id="productCount">0</strong> products</div>
+          <select class="form-select" style="width:auto;font-size:0.875rem;" id="sortSelect" onchange="renderAllProducts()">
+            <option value="featured">Featured</option>
+            <option value="price-low">Price: Low to High</option>
+            <option value="price-high">Price: High to Low</option>
+            <option value="rating">Best Rating</option>
+          </select>
+        </div>
+        <div class="row g-4" id="allProductsGrid"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================
+     PAGE: DEALS
+======================================== -->
+<div id="page-deals" class="page-section">
+  <div style="background:var(--secondary);padding:3rem 0 2rem;">
+    <div class="container">
+      <div class="section-label" style="color:var(--accent);">Limited Time</div>
+      <h1 class="section-title" style="color:white;">Today's <span style="color:var(--primary);">Hot Deals</span></h1>
+      <p style="color:rgba(255,255,255,0.55);">Grab these exclusive discounts before they're gone!</p>
+    </div>
+  </div>
+  <div class="container" style="padding:3rem 12px;">
+    <div class="row g-4" id="dealsGrid"></div>
+  </div>
+</div>
+
+<!-- ========================================
+     PAGE: BRANDS
+======================================== -->
+<div id="page-brands" class="page-section">
+  <div style="background:white;padding:3rem 0 2rem;border-bottom:1px solid var(--border);">
+    <div class="container">
+      <div class="section-label">Partners</div>
+      <h1 class="section-title">All <span class="accent">Brands</span></h1>
+    </div>
+  </div>
+  <div class="container" style="padding:3rem 12px;">
+    <div class="row g-4" id="brandsGrid"></div>
+  </div>
+</div>
+
+<!-- ========================================
+     PAGE: ABOUT
+======================================== -->
+<div id="page-about" class="page-section">
+  <div style="background:var(--secondary);padding:5rem 0;">
+    <div class="container text-center">
+      <div class="section-label" style="color:var(--accent);justify-content:center;">Our Story</div>
+      <h1 class="section-title" style="color:white;margin-bottom:1rem;">About <span style="color:var(--primary);">ElectroMart</span></h1>
+      <p style="color:rgba(255,255,255,0.6);max-width:600px;margin:0 auto;font-size:1.05rem;line-height:1.8;">India's most trusted electronics marketplace, bringing the latest tech to your doorstep since 2015.</p>
+    </div>
+  </div>
+  <div class="container" style="padding:5rem 12px;">
+    <div class="row g-5 align-items-center mb-5">
+      <div class="col-lg-6">
+        <div class="section-label">Who We Are</div>
+        <h2 class="section-title">Passionate About <span class="accent">Technology</span></h2>
+        <p style="color:var(--text-muted);margin:1.5rem 0;line-height:1.8;">ElectroMart was founded with a simple mission: make premium electronics accessible to everyone across India. We partner directly with manufacturers and authorized distributors to bring you genuine products at the best prices.</p>
+        <p style="color:var(--text-muted);margin:1.5rem 0;line-height:1.8;">Our team of tech enthusiasts carefully curates every product in our catalog, ensuring only the best make it to our platform. With over 50,000 happy customers and counting, we're proud to be your trusted tech partner.</p>
+        <div class="row g-3 mt-2">
+          <div class="col-6"><div style="background:var(--surface);border-radius:var(--radius);padding:1.25rem;text-align:center;"><div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:2rem;font-weight:700;color:var(--primary);">2015</div><div style="font-size:0.8rem;color:var(--text-muted);">Founded</div></div></div>
+          <div class="col-6"><div style="background:var(--surface);border-radius:var(--radius);padding:1.25rem;text-align:center;"><div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:2rem;font-weight:700;color:var(--primary);">50K+</div><div style="font-size:0.8rem;color:var(--text-muted);">Customers</div></div></div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div style="background:linear-gradient(135deg,var(--primary),var(--primary-dark));border-radius:var(--radius-lg);padding:3rem;color:white;">
+          <h3 style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:1.5rem;margin-bottom:2rem;">Our Values</h3>
+          <div style="display:flex;flex-direction:column;gap:1.5rem;">
+            <div style="display:flex;gap:1rem;"><div style="width:44px;height:44px;background:rgba(255,255,255,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="fas fa-check"></i></div><div><div style="font-weight:700;margin-bottom:0.25rem;">100% Genuine Products</div><div style="color:rgba(255,255,255,0.65);font-size:0.875rem;">Every product comes with authentic warranty</div></div></div>
+            <div style="display:flex;gap:1rem;"><div style="width:44px;height:44px;background:rgba(255,255,255,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="fas fa-headset"></i></div><div><div style="font-weight:700;margin-bottom:0.25rem;">Expert Customer Support</div><div style="color:rgba(255,255,255,0.65);font-size:0.875rem;">Real humans, not bots. Available 24/7.</div></div></div>
+            <div style="display:flex;gap:1rem;"><div style="width:44px;height:44px;background:rgba(255,255,255,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="fas fa-bolt"></i></div><div><div style="font-weight:700;margin-bottom:0.25rem;">Lightning Fast Delivery</div><div style="color:rgba(255,255,255,0.65);font-size:0.875rem;">Same-day delivery in select cities</div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="background:var(--surface);border-radius:var(--radius-lg);padding:3rem;text-align:center;" class="mt-4">
+      <h3 class="section-title mb-2">Our <span class="accent">Team</span></h3>
+      <p style="color:var(--text-muted);margin-bottom:2.5rem;">The passionate people behind ElectroMart</p>
+      <div class="row g-4">
+        <div class="col-md-3 col-6" style="text-align:center;">
+          <div style="width:80px;height:80px;background:linear-gradient(135deg,#FF6B2B,#E0541A);border-radius:50%;margin:0 auto 1rem;display:flex;align-items:center;justify-content:center;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:1.2rem;color:white;">AK</div>
+          <div style="font-weight:700;font-size:0.9rem;">Ankit Kumar</div>
+          <div style="font-size:0.78rem;color:var(--primary);">Founder & CEO</div>
+        </div>
+        <div class="col-md-3 col-6" style="text-align:center;">
+          <div style="width:80px;height:80px;background:linear-gradient(135deg,#00D4AA,#009977);border-radius:50%;margin:0 auto 1rem;display:flex;align-items:center;justify-content:center;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:1.2rem;color:white;">SR</div>
+          <div style="font-weight:700;font-size:0.9rem;">Sneha Reddy</div>
+          <div style="font-size:0.78rem;color:var(--primary);">Head of Products</div>
+        </div>
+        <div class="col-md-3 col-6" style="text-align:center;">
+          <div style="width:80px;height:80px;background:linear-gradient(135deg,#FFD93D,#e6c200);border-radius:50%;margin:0 auto 1rem;display:flex;align-items:center;justify-content:center;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:1.2rem;color:#333;">VN</div>
+          <div style="font-weight:700;font-size:0.9rem;">Vijay Nair</div>
+          <div style="font-size:0.78rem;color:var(--primary);">Tech Director</div>
+        </div>
+        <div class="col-md-3 col-6" style="text-align:center;">
+          <div style="width:80px;height:80px;background:linear-gradient(135deg,#1A1A2E,#2A2A4E);border-radius:50%;margin:0 auto 1rem;display:flex;align-items:center;justify-content:center;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:1.2rem;color:white;">MS</div>
+          <div style="font-weight:700;font-size:0.9rem;">Meera Singh</div>
+          <div style="font-size:0.78rem;color:var(--primary);">Customer Success</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================
+     PAGE: CONTACT
+======================================== -->
+<div id="page-contact" class="page-section">
+  <div style="background:var(--secondary);padding:3rem 0 2rem;">
+    <div class="container">
+      <div class="section-label" style="color:var(--accent);">Get In Touch</div>
+      <h1 class="section-title" style="color:white;">Contact <span style="color:var(--primary);">Us</span></h1>
+    </div>
+  </div>
+  <div class="container" style="padding:4rem 12px;">
+    <div class="row g-5">
+      <div class="col-lg-5">
+        <div style="display:flex;flex-direction:column;gap:1.5rem;margin-bottom:2.5rem;">
+          <div style="display:flex;gap:1rem;"><div style="width:52px;height:52px;background:rgba(255,107,43,0.1);border-radius:14px;display:flex;align-items:center;justify-content:center;color:var(--primary);font-size:1.2rem;flex-shrink:0;"><i class="fas fa-map-marker-alt"></i></div><div><div style="font-weight:700;margin-bottom:0.25rem;">Our Address</div><div style="color:var(--text-muted);font-size:0.875rem;line-height:1.5;">Plot 42, Tech Park Lane, Hitech City, Hyderabad, Telangana 500084</div></div></div>
+          <div style="display:flex;gap:1rem;"><div style="width:52px;height:52px;background:rgba(255,107,43,0.1);border-radius:14px;display:flex;align-items:center;justify-content:center;color:var(--primary);font-size:1.2rem;flex-shrink:0;"><i class="fas fa-phone"></i></div><div><div style="font-weight:700;margin-bottom:0.25rem;">Phone</div><div style="color:var(--text-muted);font-size:0.875rem;">+91 98765 43210<br>+91 80000 12345</div></div></div>
+          <div style="display:flex;gap:1rem;"><div style="width:52px;height:52px;background:rgba(255,107,43,0.1);border-radius:14px;display:flex;align-items:center;justify-content:center;color:var(--primary);font-size:1.2rem;flex-shrink:0;"><i class="fas fa-envelope"></i></div><div><div style="font-weight:700;margin-bottom:0.25rem;">Email</div><div style="color:var(--text-muted);font-size:0.875rem;">support@electromart.in<br>sales@electromart.in</div></div></div>
+          <div style="display:flex;gap:1rem;"><div style="width:52px;height:52px;background:rgba(255,107,43,0.1);border-radius:14px;display:flex;align-items:center;justify-content:center;color:var(--primary);font-size:1.2rem;flex-shrink:0;"><i class="fas fa-clock"></i></div><div><div style="font-weight:700;margin-bottom:0.25rem;">Working Hours</div><div style="color:var(--text-muted);font-size:0.875rem;">Mon-Sat: 9:00 AM – 8:00 PM<br>Sunday: 10:00 AM – 6:00 PM</div></div></div>
+        </div>
+        <div style="background:var(--surface);border-radius:var(--radius-lg);padding:1.5rem;">
+          <div style="font-weight:700;margin-bottom:1rem;">Follow Us</div>
+          <div class="social-links">
+            <a href="#" class="social-btn" style="background:rgba(24,119,242,0.1);border-color:rgba(24,119,242,0.2);color:#1877f2;"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="social-btn" style="background:rgba(29,161,242,0.1);border-color:rgba(29,161,242,0.2);color:#1da1f2;"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="social-btn" style="background:rgba(225,48,108,0.1);border-color:rgba(225,48,108,0.2);color:#e1306c;"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="social-btn" style="background:rgba(255,0,0,0.1);border-color:rgba(255,0,0,0.2);color:#ff0000;"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-7">
+        <div style="background:white;border-radius:var(--radius-lg);padding:2.5rem;border:1px solid var(--border);">
+          <h3 style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;margin-bottom:0.5rem;">Send Us a Message</h3>
+          <p style="color:var(--text-muted);font-size:0.875rem;margin-bottom:2rem;">We'll get back to you within 24 hours</p>
+          <div class="row g-3">
+            <div class="col-md-6"><label style="font-size:0.825rem;font-weight:600;margin-bottom:0.4rem;display:block;">Full Name</label><input type="text" class="form-control" placeholder="Rahul Kumar" style="border-radius:10px;border-color:var(--border);padding:0.75rem 1rem;"></div>
+            <div class="col-md-6"><label style="font-size:0.825rem;font-weight:600;margin-bottom:0.4rem;display:block;">Email</label><input type="email" class="form-control" placeholder="rahul@example.com" style="border-radius:10px;border-color:var(--border);padding:0.75rem 1rem;"></div>
+            <div class="col-12"><label style="font-size:0.825rem;font-weight:600;margin-bottom:0.4rem;display:block;">Subject</label><select class="form-select" style="border-radius:10px;border-color:var(--border);padding:0.75rem 1rem;"><option>Order Inquiry</option><option>Product Question</option><option>Return/Refund</option><option>Technical Support</option><option>Other</option></select></div>
+            <div class="col-12"><label style="font-size:0.825rem;font-weight:600;margin-bottom:0.4rem;display:block;">Message</label><textarea class="form-control" rows="5" placeholder="Tell us how we can help..." style="border-radius:10px;border-color:var(--border);padding:0.75rem 1rem;resize:none;"></textarea></div>
+            <div class="col-12"><button class="btn-primary-hero w-100" onclick="showToast('Message sent! We\\'ll get back to you soon.','fa-paper-plane')"><i class="fas fa-paper-plane"></i> Send Message</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== FOOTER ========== -->
+<footer>
+  <div class="container">
+    <div class="row g-5">
+      <div class="col-lg-4">
+        <div class="footer-brand">Electro<span>Mart</span></div>
+        <p class="footer-desc">India's most trusted electronics marketplace. Premium gadgets, unbeatable prices, lightning-fast delivery — all under one roof.</p>
+        <div class="social-links">
+          <a href="#" class="social-btn"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="social-btn"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="social-btn"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="social-btn"><i class="fab fa-youtube"></i></a>
+          <a href="#" class="social-btn"><i class="fab fa-whatsapp"></i></a>
+        </div>
+      </div>
+      <div class="col-lg-2 col-md-3 col-6">
+        <div class="footer-heading">Quick Links</div>
+        <ul class="footer-links">
+          <li><a href="#" onclick="navigateTo('home');return false;"><i class="fas fa-chevron-right" style="font-size:0.6rem;"></i>Home</a></li>
+          <li><a href="#" onclick="navigateTo('products');return false;"><i class="fas fa-chevron-right" style="font-size:0.6rem;"></i>Products</a></li>
+          <li><a href="#" onclick="navigateTo('deals');return false;"><i class="fas fa-chevron-right" style="font-size:0.6rem;"></i>Hot Deals</a></li>
+          <li><a href="#" onclick="navigateTo('brands');return false;"><i class="fas fa-chevron-right" style="font-size:0.6rem;"></i>Brands</a></li>
+          <li><a href="#" onclick="navigateTo('about');return false;"><i class="fas fa-chevron-right" style="font-size:0.6rem;"></i>About Us</a></li>
+          <li><a href="#" onclick="navigateTo('contact');return false;"><i class="fas fa-chevron-right" style="font-size:0.6rem;"></i>Contact</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-2 col-md-3 col-6">
+        <div class="footer-heading">Categories</div>
+        <ul class="footer-links">
+          <li><a href="#" onclick="navigateTo('products');return false;"><i class="fas fa-chevron-right" style="font-size:0.6rem;"></i>Laptops</a></li>
+          <li><a href="#" onclick="navigateTo('products');return false;"><i class="fas fa-chevron-right" style="font-size:0.6rem;"></i>Smartphones</a></li>
+          <li><a href="#" onclick="navigateTo('products');return false;"><i class="fas fa-chevron-right" style="font-size:0.6rem;"></i>Audio</a></li>
+          <li><a href="#" onclick="navigateTo('products');return false;"><i class="fas fa-chevron-right" style="font-size:0.6rem;"></i>TVs</a></li>
+          <li><a href="#" onclick="navigateTo('products');return false;"><i class="fas fa-chevron-right" style="font-size:0.6rem;"></i>Cameras</a></li>
+          <li><a href="#" onclick="navigateTo('products');return false;"><i class="fas fa-chevron-right" style="font-size:0.6rem;"></i>Gaming</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="footer-heading">Contact Us</div>
+        <div class="footer-contact-item">
+          <i class="fas fa-map-marker-alt footer-contact-icon"></i>
+          <div class="footer-contact-text">Plot 42, Tech Park Lane, Hitech City, Hyderabad, Telangana 500084</div>
+        </div>
+        <div class="footer-contact-item">
+          <i class="fas fa-phone footer-contact-icon"></i>
+          <div class="footer-contact-text">+91 98765 43210</div>
+        </div>
+        <div class="footer-contact-item">
+          <i class="fas fa-envelope footer-contact-icon"></i>
+          <div class="footer-contact-text">enjoytech8@gmail.com</div>
+        </div>
+        <div style="margin-top:1.5rem;">
+          <div class="footer-heading" style="margin-bottom:0.75rem;">Newsletter</div>
+          <div style="display:flex;gap:0.5rem;">
+            <input type="email" placeholder="Your email" style="flex:1;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:0.6rem 1rem;color:white;font-size:0.85rem;outline:none;font-family:'Inter',sans-serif;">
+            <button onclick="showToast('Subscribed successfully! 🎉','fa-check')" style="background:var(--primary);color:white;border:none;padding:0.6rem 1rem;border-radius:10px;cursor:pointer;font-size:0.85rem;transition:all 0.2s;white-space:nowrap;">Subscribe</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Kanaka Raju. All rights reserved. Made with ❤️ in Hyderabad, India.</p>
+      <div class="footer-payment">
+        <span style="font-size:0.75rem;color:rgba(255,255,255,0.3);margin-right:0.25rem;">We Accept:</span>
+        <span class="payment-icon visa">VISA</span>
+        <span class="payment-icon mc">MC</span>
+        <span class="payment-icon">UPI</span>
+        <span class="payment-icon">PayTM</span>
+        <span class="payment-icon">COD</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- CART DRAWER -->
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-header">
+    <div class="cart-title"><i class="fas fa-shopping-bag" style="color:var(--primary);margin-right:0.5rem;"></i>Your Cart</div>
+    <button class="cart-close" onclick="toggleCart()"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="cart-body" id="cartBody">
+    <div class="cart-empty"><i class="fas fa-shopping-bag"></i><br>Your cart is empty<br><small>Add some amazing products!</small></div>
+  </div>
+  <div class="cart-footer" id="cartFooter" style="display:none;">
+    <div class="cart-total">
+      <span class="cart-total-label">Total</span>
+      <span class="cart-total-amount" id="cartTotal">₹0</span>
+    </div>
+    <button class="btn-checkout" onclick="showToast('Checkout coming soon! 🚀','fa-bolt')">
+      <i class="fas fa-lock" style="margin-right:0.5rem;"></i>Proceed to Checkout
+    </button>
+  </div>
+</div>
+
+<!-- SEARCH MODAL -->
+<div class="search-modal" id="searchModal" onclick="if(event.target===this)toggleSearch()">
+  <div class="search-box">
+    <div class="search-input-wrap">
+      <i class="fas fa-search search-icon"></i>
+      <input type="text" class="search-input" id="searchInput" placeholder="Search for laptops, phones, headphones..." oninput="handleSearch(this.value)">
+      <button class="search-close" onclick="toggleSearch()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="search-suggestions">
+      <p>Popular Searches</p>
+      <span class="suggestion-chip" onclick="doSearch('MacBook')">MacBook</span>
+      <span class="suggestion-chip" onclick="doSearch('iPhone 15')">iPhone 15</span>
+      <span class="suggestion-chip" onclick="doSearch('Sony WH-1000XM5')">Sony Headphones</span>
+      <span class="suggestion-chip" onclick="doSearch('Samsung TV')">Samsung TV</span>
+      <span class="suggestion-chip" onclick="doSearch('Gaming')">Gaming</span>
+      <span class="suggestion-chip" onclick="doSearch('Camera')">Cameras</span>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- BACK TO TOP -->
+<button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+  <i class="fas fa-arrow-up"></i>
+</button>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// ==================== DATA ====================
+const products = [
+  { id:1, name:'MacBook Air M3', brand:'Apple', category:'Laptops', price:114900, oldPrice:129900, rating:4.9, reviews:2341, emoji:'💻', badge:'hot', discount:12 },
+  { id:2, name:'iPhone 15 Pro', brand:'Apple', category:'Phones', price:134900, oldPrice:149900, rating:4.8, reviews:5621, emoji:'📱', badge:'new', discount:10 },
+  { id:3, name:'Sony WH-1000XM5', brand:'Sony', category:'Audio', price:24990, oldPrice:34990, rating:4.9, reviews:3890, emoji:'🎧', badge:'sale', discount:29 },
+  { id:4, name:'Samsung 55" QLED TV', brand:'Samsung', category:'TVs', price:79990, oldPrice:99990, rating:4.7, reviews:1205, emoji:'📺', badge:'hot', discount:20 },
+  { id:5, name:'iPad Air M2', brand:'Apple', category:'Phones', price:59900, oldPrice:74900, rating:4.8, reviews:2089, emoji:'📱', badge:'new', discount:20 },
+  { id:6, name:'Dell XPS 15', brand:'Dell', category:'Laptops', price:149900, oldPrice:169900, rating:4.7, reviews:987, emoji:'💻', badge:'hot', discount:12 },
+  { id:7, name:'Sony Alpha A7 IV', brand:'Sony', category:'Cameras', price:194990, oldPrice:219990, rating:4.9, reviews:743, emoji:'📷', badge:'new', discount:11 },
+  { id:8, name:'PS5 Console', brand:'Sony', category:'Gaming', price:49990, oldPrice:54990, rating:4.9, reviews:8903, emoji:'🎮', badge:'hot', discount:9 },
+  { id:9, name:'AirPods Pro 2nd Gen', brand:'Apple', category:'Audio', price:24900, oldPrice:29900, rating:4.8, reviews:4532, emoji:'🎧', badge:'sale', discount:17 },
+  { id:10, name:'LG 65" OLED TV', brand:'LG', category:'TVs', price:149990, oldPrice:189990, rating:4.8, reviews:654, emoji:'📺', badge:'hot', discount:21 },
+  { id:11, name:'Bose QuietComfort 45', brand:'Bose', category:'Audio', price:19990, oldPrice:29990, rating:4.7, reviews:2134, emoji:'🎧', badge:'sale', discount:33 },
+  { id:12, name:'Canon EOS R10', brand:'Canon', category:'Cameras', price:74990, oldPrice:89990, rating:4.6, reviews:432, emoji:'📷', badge:'new', discount:17 },
+  { id:13, name:'Lenovo ThinkPad X1', brand:'Lenovo', category:'Laptops', price:129900, oldPrice:149900, rating:4.7, reviews:876, emoji:'💻', badge:null, discount:13 },
+  { id:14, name:'Samsung Galaxy S24 Ultra', brand:'Samsung', category:'Phones', price:124999, oldPrice:139999, rating:4.8, reviews:3421, emoji:'📱', badge:'hot', discount:11 },
+  { id:15, name:'Nintendo Switch OLED', brand:'Nintendo', category:'Gaming', price:29999, oldPrice:34999, rating:4.7, reviews:5678, emoji:'🎮', badge:'sale', discount:14 },
+  { id:16, name:'GoPro HERO12 Black', brand:'GoPro', category:'Cameras', price:39990, oldPrice:44990, rating:4.6, reviews:1234, emoji:'📷', badge:null, discount:11 },
+];
+
+const brands = [
+  { name:'Apple', emoji:'🍎', products:342, desc:'Premium smartphones, laptops, tablets and accessories' },
+  { name:'Samsung', emoji:'📱', products:289, desc:'Galaxy smartphones, QLED TVs and home appliances' },
+  { name:'Sony', emoji:'🎵', products:198, desc:'Cameras, headphones, TVs and gaming consoles' },
+  { name:'Dell', emoji:'💻', products:134, desc:'Professional laptops, desktops and monitors' },
+  { name:'LG', emoji:'📺', products:156, desc:'OLED TVs, monitors and home electronics' },
+  { name:'Bose', emoji:'🎧', products:67, desc:'Premium audio products and soundbars' },
+  { name:'Canon', emoji:'📷', products:89, desc:'DSLR cameras, mirrorless systems and printers' },
+  { name:'Lenovo', emoji:'🖥️', products:145, desc:'ThinkPad laptops, IdeaPad and Legion gaming' },
+  { name:'Nintendo', emoji:'🎮', products:45, desc:'Switch consoles, games and accessories' },
+  { name:'GoPro', emoji:'🎬', products:38, desc:'Action cameras and adventure accessories' },
+  { name:'JBL', emoji:'🔊', products:112, desc:'Portable speakers, headphones and audio gear' },
+  { name:'Asus', emoji:'💻', products:167, desc:'ROG gaming, ZenBook laptops and monitors' },
+];
+
+let cart = [];
+
+// ==================== LOADER ====================
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('loader').classList.add('hide');
+    initReveal();
+  }, 1900);
+});
+
+// ==================== NAVIGATION ====================
+function navigateTo(page) {
+  document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-link').forEach(l => {
+    l.classList.toggle('active', l.dataset.page === page);
+  });
+  const target = document.getElementById('page-' + page);
+  if (target) {
+    target.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  if (page === 'products') renderAllProducts();
+  if (page === 'deals') renderDeals();
+  if (page === 'brands') renderBrands();
+  setTimeout(initReveal, 100);
+}
+
+// ==================== PRODUCT CARD HTML ====================
+function productCardHTML(p) {
+  const stars = '★'.repeat(Math.floor(p.rating)) + (p.rating % 1 >= 0.5 ? '★' : '');
+  return `
+    <div class="product-card">
+      <div class="product-img-wrap">
+        <div class="product-badges">
+          ${p.badge === 'new' ? '<span class="badge-pill badge-new">New</span>' : ''}
+          ${p.badge === 'hot' ? '<span class="badge-pill badge-hot">🔥 Hot</span>' : ''}
+          ${p.badge === 'sale' ? '<span class="badge-pill badge-sale">Sale</span>' : ''}
+        </div>
+        <button class="wishlist-btn" onclick="toggleWishlist(this)"><i class="fas fa-heart"></i></button>
+        <div style="font-size:4.5rem;line-height:1;">${p.emoji}</div>
+      </div>
+      <div class="product-info">
+        <div class="product-brand">${p.brand}</div>
+        <div class="product-name">${p.name}</div>
+        <div class="product-rating">
+          <span class="stars">${stars}</span>
+          <span style="font-size:0.78rem;font-weight:600;color:var(--text);">${p.rating}</span>
+          <span class="rating-count">(${p.reviews.toLocaleString()})</span>
+        </div>
+        <div class="product-price">
+          <span class="price-current">₹${p.price.toLocaleString()}</span>
+          ${p.oldPrice ? `<span class="price-old">₹${p.oldPrice.toLocaleString()}</span><span class="price-off">-${p.discount}%</span>` : ''}
+        </div>
+        <button class="btn-add-cart" onclick="addToCart('${p.name}','₹${p.price.toLocaleString()}','${p.emoji}',this)">
+          <i class="fas fa-cart-plus"></i> Add to Cart
+        </button>
+      </div>
+    </div>`;
+}
+
+// ==================== RENDER FEATURED ====================
+function renderFeatured() {
+  const grid = document.getElementById('featuredProductsGrid');
+  if (!grid) return;
+  const featured = products.slice(0, 8);
+  grid.innerHTML = featured.map(p => `<div class="col-lg-3 col-md-4 col-6 reveal">${productCardHTML(p)}</div>`).join('');
+}
+
+// ==================== RENDER ALL PRODUCTS ====================
+function renderAllProducts() {
+  const grid = document.getElementById('allProductsGrid');
+  if (!grid) return;
+
+  // Build filters
+  const cats = [...new Set(products.map(p => p.category))];
+  const catContainer = document.getElementById('filterCategories');
+  if (catContainer && !catContainer.hasChildNodes()) {
+    catContainer.innerHTML = cats.map(c => `
+      <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.875rem;cursor:pointer;">
+        <input type="checkbox" checked onchange="renderAllProducts()" value="${c}" class="cat-filter" style="accent-color:var(--primary);">
+        ${c}
+      </label>`).join('');
+  }
+
+  const brandNames = [...new Set(products.map(p => p.brand))];
+  const brandContainer = document.getElementById('filterBrands');
+  if (brandContainer && !brandContainer.hasChildNodes()) {
+    brandContainer.innerHTML = brandNames.map(b => `
+      <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.875rem;cursor:pointer;">
+        <input type="checkbox" checked onchange="renderAllProducts()" value="${b}" class="brand-filter" style="accent-color:var(--primary);">
+        ${b}
+      </label>`).join('');
+  }
+
+  const selectedCats = [...document.querySelectorAll('.cat-filter:checked')].map(i => i.value);
+  const selectedBrands = [...document.querySelectorAll('.brand-filter:checked')].map(i => i.value);
+  const maxPrice = parseInt(document.getElementById('priceRange')?.value || 200000);
+  const sort = document.getElementById('sortSelect')?.value || 'featured';
+
+  let filtered = products.filter(p =>
+    selectedCats.includes(p.category) &&
+    selectedBrands.includes(p.brand) &&
+    p.price <= maxPrice
+  );
+
+  if (sort === 'price-low') filtered.sort((a,b) => a.price - b.price);
+  else if (sort === 'price-high') filtered.sort((a,b) => b.price - a.price);
+  else if (sort === 'rating') filtered.sort((a,b) => b.rating - a.rating);
+
+  document.getElementById('productCount').textContent = filtered.length;
+  grid.innerHTML = filtered.map(p => `<div class="col-lg-4 col-md-6 col-12 reveal">${productCardHTML(p)}</div>`).join('');
+  setTimeout(initReveal, 50);
+}
+
+// ==================== RENDER DEALS ====================
+function renderDeals() {
+  const grid = document.getElementById('dealsGrid');
+  if (!grid) return;
+  const deals = products.filter(p => p.discount >= 15);
+  grid.innerHTML = deals.map((p, i) => `
+    <div class="col-lg-4 col-md-6 reveal reveal-delay-${i%4}">
+      <div style="background:white;border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border);transition:all 0.3s;" onmouseenter="this.style.transform='translateY(-6px)';this.style.boxShadow='var(--shadow-lg)';this.style.borderColor='var(--primary)'" onmouseleave="this.style.transform='';this.style.boxShadow='';this.style.borderColor='var(--border)'">
+        <div style="background:var(--surface);padding:2rem;text-align:center;position:relative;">
+          <div style="position:absolute;top:1rem;left:1rem;background:var(--primary);color:white;padding:0.25rem 0.6rem;border-radius:50px;font-size:0.7rem;font-weight:700;">-${p.discount}% OFF</div>
+          <div style="font-size:5rem;line-height:1;">${p.emoji}</div>
+        </div>
+        <div style="padding:1.25rem 1.5rem 1.5rem;">
+          <div style="font-size:0.75rem;font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:1px;margin-bottom:0.25rem;">${p.brand}</div>
+          <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1rem;font-weight:700;margin-bottom:0.75rem;">${p.name}</div>
+          <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
+            <span style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1.4rem;font-weight:700;">₹${p.price.toLocaleString()}</span>
+            <span style="font-size:0.875rem;color:var(--text-muted);text-decoration:line-through;">₹${p.oldPrice.toLocaleString()}</span>
+            <span style="background:rgba(0,196,140,0.1);color:#00C48C;font-size:0.75rem;font-weight:700;padding:0.15rem 0.4rem;border-radius:4px;">Save ₹${(p.oldPrice-p.price).toLocaleString()}</span>
+          </div>
+          <button class="btn-add-cart" onclick="addToCart('${p.name}','₹${p.price.toLocaleString()}','${p.emoji}',this)">
+            <i class="fas fa-bolt"></i> Grab This Deal
+          </button>
+        </div>
+      </div>
+    </div>`).join('');
+  setTimeout(initReveal, 50);
+}
+
+// ==================== RENDER BRANDS ====================
+function renderBrands() {
+  const grid = document.getElementById('brandsGrid');
+  if (!grid) return;
+  grid.innerHTML = brands.map((b, i) => `
+    <div class="col-lg-3 col-md-4 col-6 reveal reveal-delay-${i%4}">
+      <div style="background:white;border-radius:var(--radius-lg);padding:2rem;text-align:center;border:1px solid var(--border);cursor:pointer;transition:all 0.3s;" onmouseenter="this.style.transform='translateY(-6px)';this.style.boxShadow='var(--shadow-lg)';this.style.borderColor='var(--primary)'" onmouseleave="this.style.transform='';this.style.boxShadow='';this.style.borderColor='var(--border)'" onclick="navigateTo('products')">
+        <div style="font-size:3rem;margin-bottom:1rem;line-height:1;">${b.emoji}</div>
+        <div style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:1.1rem;margin-bottom:0.25rem;">${b.name}</div>
+        <div style="font-size:0.78rem;color:var(--primary);font-weight:600;margin-bottom:0.75rem;">${b.products} products</div>
+        <div style="font-size:0.8rem;color:var(--text-muted);line-height:1.5;">${b.desc}</div>
+      </div>
+    </div>`).join('');
+  setTimeout(initReveal, 50);
+}
+
+// ==================== CART ====================
+function toggleCart() {
+  const overlay = document.getElementById('cartOverlay');
+  const drawer = document.getElementById('cartDrawer');
+  overlay.classList.toggle('open');
+  drawer.classList.toggle('open');
+}
+
+function addToCart(name, price, emoji, btn) {
+  const existing = cart.find(i => i.name === name);
+  if (existing) { existing.qty++; }
+  else { cart.push({ name, price, emoji, qty: 1 }); }
+  updateCartUI();
+  showToast(`${name} added to cart! 🛒`, 'fa-check');
+  if (btn) {
+    const orig = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-check"></i> Added!';
+    btn.classList.add('added');
+    setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('added'); }, 1500);
+  }
+}
+
+function removeFromCart(name) {
+  cart = cart.filter(i => i.name !== name);
+  updateCartUI();
+}
+
+function updateCartUI() {
+  const count = cart.reduce((a, i) => a + i.qty, 0);
+  document.getElementById('cartCount').textContent = count;
+  const body = document.getElementById('cartBody');
+  const footer = document.getElementById('cartFooter');
+  if (cart.length === 0) {
+    body.innerHTML = '<div class="cart-empty"><i class="fas fa-shopping-bag"></i><br>Your cart is empty<br><small>Add some amazing products!</small></div>';
+    footer.style.display = 'none';
+  } else {
+    body.innerHTML = cart.map(i => `
+      <div class="cart-item">
+        <div class="cart-item-img">${i.emoji}</div>
+        <div style="flex:1;">
+          <div class="cart-item-name">${i.name}${i.qty > 1 ? ` <span style="color:var(--primary);font-weight:700;">×${i.qty}</span>` : ''}</div>
+          <div class="cart-item-price">${i.price}</div>
+        </div>
+        <button class="cart-item-remove" onclick="removeFromCart('${i.name}')"><i class="fas fa-trash-alt"></i></button>
+      </div>`).join('');
+    footer.style.display = 'block';
+    const total = cart.reduce((sum, i) => {
+      const n = parseInt(i.price.replace(/[₹,]/g,''));
+      return sum + n * i.qty;
+    }, 0);
+    document.getElementById('cartTotal').textContent = '₹' + total.toLocaleString();
+  }
+}
+
+// ==================== WISHLIST ====================
+function toggleWishlist(btn) {
+  btn.classList.toggle('active');
+  const isLiked = btn.classList.contains('active');
+  showToast(isLiked ? 'Added to wishlist! ❤️' : 'Removed from wishlist', isLiked ? 'fa-heart' : 'fa-heart-broken');
+}
+
+// ==================== SEARCH ====================
+function toggleSearch() {
+  const modal = document.getElementById('searchModal');
+  modal.classList.toggle('open');
+  if (modal.classList.contains('open')) document.getElementById('searchInput').focus();
+}
+
+function doSearch(term) {
+  document.getElementById('searchInput').value = term;
+  toggleSearch();
+  navigateTo('products');
+  showToast(`Showing results for "${term}"`, 'fa-search');
+}
+
+function handleSearch(val) {
+  if (val.length > 2) {
+    // Could filter products here
+  }
+}
+
+// ==================== TOAST ====================
+function showToast(msg, icon = 'fa-info-circle') {
+  const container = document.getElementById('toastContainer');
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.innerHTML = `<i class="fas ${icon}"></i> ${msg}`;
+  container.appendChild(toast);
+  setTimeout(() => { toast.style.opacity = '0'; toast.style.transform = 'translateX(50px)'; toast.style.transition = 'all 0.3s'; setTimeout(() => toast.remove(), 300); }, 3000);
+}
+
+// ==================== COUNTDOWN ====================
+function initCountdowns() {
+  function renderCountdown(id, targetHours) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const target = new Date().getTime() + targetHours * 3600000;
+    function update() {
+      const now = new Date().getTime();
+      const diff = target - now;
+      if (diff <= 0) { el.innerHTML = '<span style="color:rgba(255,255,255,0.4);font-size:0.85rem;">Deal ended</span>'; return; }
+      const h = Math.floor(diff / 3600000);
+      const m = Math.floor((diff % 3600000) / 60000);
+      const s = Math.floor((diff % 60000) / 1000);
+      el.innerHTML = [['h',h],['m',m],['s',s]].map(([l,v]) => `<div class="countdown-unit"><span class="countdown-num">${String(v).padStart(2,'0')}</span><span class="countdown-lbl">${l}</span></div>`).join('');
+    }
+    update();
+    setInterval(update, 1000);
+  }
+  renderCountdown('countdown1', 5.5);
+  renderCountdown('countdown2', 12.3);
+}
+
+// ==================== SCROLL ====================
+window.addEventListener('scroll', () => {
+  const scrollY = window.scrollY;
+  document.getElementById('mainNav').classList.toggle('scrolled', scrollY > 50);
+  document.getElementById('backToTop').classList.toggle('visible', scrollY > 400);
+  initReveal();
+});
+
+// ==================== REVEAL ANIMATION ====================
+function initReveal() {
+  document.querySelectorAll('.reveal').forEach(el => {
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight - 60) el.classList.add('visible');
+  });
+}
+
+// ==================== NEWSLETTER ====================
+function subscribeNewsletter() {
+  const email = document.getElementById('newsletterEmail').value;
+  if (!email || !email.includes('@')) { showToast('Please enter a valid email!', 'fa-exclamation-circle'); return; }
+  showToast('Subscribed! Welcome to ElectroMart family 🎉', 'fa-check');
+  document.getElementById('newsletterEmail').value = '';
+}
+
+// ==================== INIT ====================
+renderFeatured();
+initCountdowns();
+setTimeout(initReveal, 2200);
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    document.getElementById('searchModal').classList.remove('open');
+    document.getElementById('cartOverlay').classList.remove('open');
+    document.getElementById('cartDrawer').classList.remove('open');
+  }
+  if ((e.ctrlKey || e.metaKey) && e.key === 'k') { e.preventDefault(); toggleSearch(); }
+});
+</script>
+</body>
+</html>
